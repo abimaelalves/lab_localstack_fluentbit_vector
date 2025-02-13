@@ -141,5 +141,3 @@ Arquivo: `convert_to_parquet.py` (use esse script para testar a conversao para .
 ```
 
 ---
-
-# lab_localstack_fluentbit_vector
