@@ -1,0 +1,38 @@
+sources:
+  fluentbit:
+    type: socket
+    address: 0.0.0.0:5170
+    mode: tcp
+    encoding:
+      codec: json
+
+sinks:
+  stdout:
+    type: console
+    inputs: ["fluentbit"]
+    encoding:
+      codec: json
+      pretty: true
+
+  file_sink:
+    type: file
+    inputs: ["fluentbit"]
+    path: "/tmp/vector-logs/%Y-%m-%d/%H-%M-%S.json.gz"
+    compression: gzip
+    encoding:
+      codec: json
+
+  s3:
+    type: aws_s3
+    inputs: ["fluentbit"]
+    bucket: "fluentbit-logs"
+    region: "us-east-1"
+    endpoint: "http://localstack:4566"
+    compression: "gzip"
+    content_type: "application/json"
+    encoding:
+      codec: json
+    key_prefix: "logs/%Y-%m-%d/"
+    batch:
+      max_bytes: 1000000
+      timeout_secs: 10
